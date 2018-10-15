@@ -45,7 +45,7 @@ node {
                     allowMissing: false,
                     alwaysLinkToLastBuild: false,
                     keepAll: true,
-                    reportDir: 'distr/gocov',
+                    reportDir: 'build/gocov',
                     reportFiles: 'coverage.html',
                     reportName: "gocov report"
                 ])
