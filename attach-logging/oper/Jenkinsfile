@@ -40,7 +40,7 @@ node {
     stage('Test and coverage') {
         withEnv(customEnv) {
             dir(pkgDir) {
-                sh 'PATH=$PATH:$GOPATH/bin make gocov-cover-html'
+                sh 'PATH=$PATH:$GOPATH/bin make gocov-html'
                 publishHTML (target: [
                     allowMissing: false,
                     alwaysLinkToLastBuild: false,
