@@ -1,3 +1,55 @@
 node {
-   echo 'Hello World'
+
+    def cleanupWorkspace = false
+    def pkg = 'github.com/attach-live/attach-logging'
+    def gitUrl = 'git@github.com:attach-live/attach-logging.git'
+    def branch = params.branch
+
+    def gitObj
+    def pkgDir
+    stage('Checkout') {
+        if(cleanupWorkspace){
+            deleteDir()
+        }
+
+        pkgDir = 'src/' + pkg
+
+        sh 'mkdir -p ' + pkgDir
+        dir(pkgDir) {
+            gitObj = git branch: branch, url: gitUrl
+        }
+    }
+
+    def customEnv = [
+        "GOPATH=${env.WORKSPACE}",
+        "BUILD_COMMIT=${gitObj.GIT_COMMIT}",
+        "BUILD_BRANCH=${gitObj.GIT_BRANCH}",
+    ]
+    stage('Lint') {
+        try {
+            withEnv(customEnv) {
+                dir(pkgDir) {
+                    sh 'PATH=$PATH:$GOPATH/bin make gometalinter lint'
+                }
+            }
+        } catch (Exception){
+           currentBuild.result = 'UNSTABLE'
+        }
+    }
+
+    stage('Test and coverage') {
+        withEnv(customEnv) {
+            dir(pkgDir) {
+                sh 'PATH=$PATH:$GOPATH/bin make gocov-cover-html'
+                publishHTML (target: [
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: false,
+                    keepAll: true,
+                    reportDir: 'distr/gocov',
+                    reportFiles: 'coverage.html',
+                    reportName: "gocov report"
+                ])
+            }
+        }
+    }
 }
