@@ -47,7 +47,7 @@ node {
                     keepAll: true,
                     reportDir: 'build/gocov',
                     reportFiles: 'coverage.html',
-                    reportName: "gocov report"
+                    reportName: "gocov-report"
                 ])
             }
         }
