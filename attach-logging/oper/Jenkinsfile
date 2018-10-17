@@ -1,6 +1,6 @@
 node {
 
-    def cleanupWorkspace = false
+    def cleanupWorkspace = true
     def pkg = 'github.com/attach-live/attach-logging'
     def gitUrl = 'git@github.com:attach-live/attach-logging.git'
     def branch = params.branch
