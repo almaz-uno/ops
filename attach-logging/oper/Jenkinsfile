@@ -52,4 +52,12 @@ node {
             }
         }
     }
+
+    stage('Build') {
+        withEnv(customEnv) {
+            dir(pkgDir) {
+                sh 'PATH=$PATH:$GOPATH/bin make install'
+            }
+        }
+    }
 }
