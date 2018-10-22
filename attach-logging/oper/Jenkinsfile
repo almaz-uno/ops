@@ -7,7 +7,8 @@ node {
 
     def gitObj
     def pkgDir
-    stage("Checkout ($branch)") {
+    stage('Checkout') {
+        echo "Checkout ($branch)"
         if(cleanupWorkspace){
             deleteDir()
         }
