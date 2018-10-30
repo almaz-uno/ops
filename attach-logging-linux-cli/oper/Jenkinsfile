@@ -62,4 +62,12 @@ node {
             }
         }
     }
+
+    stage('Test run') {
+        withEnv(customEnv) {
+            dir(pkgDir) {
+                sh 'PATH=$PATH:$GOPATH/bin logd version'
+            }
+        }
+    }
 }
