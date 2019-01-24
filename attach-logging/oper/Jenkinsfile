@@ -1,8 +1,8 @@
 node {
 
     def cleanupWorkspace = true
-    def pkg = 'github.com/attach-live/attach-logging'
-    def gitUrl = 'git@github.com:attach-live/attach-logging.git'
+    def pkg = 'github.com/attach-live/attach-logs'
+    def gitUrl = 'git@github.com:attach-live/attach-logs.git'
     def branch = params.branch
     def goDir = '/usr/local/go'
 
