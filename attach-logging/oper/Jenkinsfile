@@ -24,6 +24,7 @@ node {
     }
 
     def customEnv = [
+        "TEST_DB=postgresql://al@cured-pc2:26257/aldb?sslmode=disable",
         "PATH=${PATH}:${goDir}/bin",
         "GOPATH=${env.WORKSPACE}",
         "BUILD_COMMIT=${gitObj.GIT_COMMIT}",
