@@ -4,6 +4,7 @@ node {
     def pkg = 'github.com/attach-live/attach-logging'
     def gitUrl = 'git@github.com:attach-live/attach-logging.git'
     def branch = params.branch
+    def goDir = '/usr/local/go'
 
     def gitObj
     def pkgDir
@@ -23,6 +24,7 @@ node {
     }
 
     def customEnv = [
+        "PATH=${PATH}:${goDir}/bin",
         "GOPATH=${env.WORKSPACE}",
         "BUILD_COMMIT=${gitObj.GIT_COMMIT}",
         "BUILD_BRANCH=${gitObj.GIT_BRANCH}",
