@@ -5,6 +5,7 @@ node {
     def gitUrl = 'git@github.com:attach-live/attach-logs.git'
     def branch = params.branch
     def goDir = '/usr/local/go'
+    def lintDir = env.WORKSPACE + "/golangci-lint"
 
     def gitObj
     def pkgDir
@@ -15,9 +16,10 @@ node {
             deleteDir()
         }
 
-        pkgDir = 'src/' + pkg
+        // pkgDir = 'src/' + pkg
+        pkgDir = env.WORKSPACE
 
-        sh 'mkdir -p ' + pkgDir
+        // sh 'mkdir -p ' + pkgDir
         dir(pkgDir) {
             gitObj = git branch: branch, url: gitUrl
         }
@@ -33,8 +35,12 @@ node {
     stage('Lint') {
         try {
             withEnv(customEnv) {
+                sh 'mkdir -p ' + lintDir
+                dir(lintDir) {
+                    sh 'curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s v1.14.0'
+                }
                 dir(pkgDir) {
-                    sh 'PATH=$PATH:$GOPATH/bin make gometalinter lint'
+                    sh 'PATH=$PATH:$GOPATH/bin:'+lintDir+'/bin make lint'
                 }
             }
         } catch (Exception){
@@ -45,7 +51,7 @@ node {
     stage('Test and coverage') {
         withEnv(customEnv) {
             dir(pkgDir) {
-                sh 'PATH=$PATH:$GOPATH/bin make gocov-html'
+                sh 'TEST_DB=postgresql://al@cured-pc2:26257/aldb?sslmode=disable PATH=$PATH:$GOPATH/bin make gocov-html'
                 publishHTML (target: [
                     allowMissing: false,
                     alwaysLinkToLastBuild: false,
