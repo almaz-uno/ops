@@ -9,7 +9,6 @@ node {
     def lintDir = env.WORKSPACE + "/golangci-lint"
 
     def gitObj
-    def pkgDir
     stage('Checkout') {
         currentBuild.displayName += " ($branch)"
 
